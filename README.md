@@ -1,4 +1,4 @@
-# 🏫 School-wise Pass Percentage Comparison (SSC)
+# 🏫 School-wise Pass Percentage Comparison (SSC) for Purandar Taluka
 
 A comprehensive Streamlit web application for analyzing and comparing SSC (Secondary School Certificate) examination results across multiple schools in Pune district.
 
