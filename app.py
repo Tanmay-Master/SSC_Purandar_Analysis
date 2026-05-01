@@ -7,6 +7,21 @@ from school_marathi_mapping import get_marathi_name
 st.set_page_config(page_title="SSC School Comparison", layout="wide")
 st.title("🏫 School‑wise Pass Percentage Comparison (SSC)")
 
+# ---------- High-quality image download config ----------
+# ADJUST IMAGE DIMENSIONS HERE:
+# 'height': increase/decrease downloaded image height (pixels)
+# 'width': increase/decrease downloaded image width (pixels)
+# 'scale': 1=normal, 2=2x resolution (sharper), 3=3x resolution (highest quality)
+HIGH_QUALITY_CONFIG = {
+    'toImageButtonOptions': {
+        'format': 'png',
+        'filename': 'school_analysis',
+        'height': 1000,  # Increase for taller images
+        'width': 2500,   # Increase for wider images
+        'scale': 3       # 3x resolution for maximum quality
+    }
+}
+
 # ---------- Load data (cached for speed) ----------
 @st.cache_data
 def load_data():
@@ -72,18 +87,18 @@ fig = px.bar(
     color_continuous_scale='Blues',
     height=max(400, len(filtered) * 25)
 )
-fig.update_traces(textposition='outside', textfont_size=12)
+fig.update_traces(textposition='outside', textfont_size=16)
 fig.update_xaxes(range=[0, 105])
 fig.update_layout(
     yaxis={'categoryorder': 'total ascending'},
     margin=dict(l=400, r=100, t=100, b=80),
     yaxis_title='',
     xaxis_title='Pass Percentage (%)',
-    font=dict(size=10),
+    font=dict(size=18, family='Arial Black'),
     showlegend=False
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True, config=HIGH_QUALITY_CONFIG)
 
 # ---------- Timeline: School Performance Over Years ----------
 st.markdown("---")
@@ -113,12 +128,13 @@ if not school_timeline.empty:
             labels={'value': 'Count', 'variable': 'Category'},
             height=400
         )
-        fig_timeline.update_traces(mode='lines+markers', hovertemplate='<b>%{fullData.name}</b><br>Year: %{x}<br>Count: %{y}<extra></extra>', textposition='top center', texttemplate='%{y:.0f}', textfont_size=10)
+        fig_timeline.update_traces(mode='lines+markers', hovertemplate='<b>%{fullData.name}</b><br>Year: %{x}<br>Count: %{y}<extra></extra>', textposition='top center', texttemplate='%{y:.0f}', textfont_size=14)
         fig_timeline.update_layout(
-            hovermode='x unified'
+            hovermode='x unified',
+            font=dict(size=16, family='Arial Black')
         )
         fig_timeline.update_xaxes(dtick=1)
-        st.plotly_chart(fig_timeline, use_container_width=True)
+        st.plotly_chart(fig_timeline, use_container_width=True, config=HIGH_QUALITY_CONFIG)
     
     with col2:
         # Timeline: Pass Percentage Trend
@@ -139,11 +155,13 @@ if not school_timeline.empty:
             marker_size=8,
             texttemplate='%{text:.1f}%',
             textposition='top center',
+            textfont_size=14,
             hovertemplate='Year: %{x}<br>Pass %: %{y:.1f}%<extra></extra>'
         )
         fig_pass_pct.update_xaxes(dtick=1)
         fig_pass_pct.update_yaxes(range=[0, 105])
-        st.plotly_chart(fig_pass_pct, use_container_width=True)
+        fig_pass_pct.update_layout(font=dict(size=16, family='Arial Black'))
+        st.plotly_chart(fig_pass_pct, use_container_width=True, config=HIGH_QUALITY_CONFIG)
     
     # Performance Table
     st.markdown("**Performance Details:**")
@@ -207,10 +225,10 @@ if not avg_data_sorted.empty:
             xaxis_title='Average Pass % (%)',
             margin=dict(l=400, r=50, t=80, b=60),
             xaxis=dict(range=[0, 105]),
-            font=dict(size=10)
+            font=dict(size=18, family='Arial Black')
         )
-        fig_all.update_traces(textposition='outside', texttemplate='%{x:.1f}%')
-        st.plotly_chart(fig_all, use_container_width=True)
+        fig_all.update_traces(textposition='outside', texttemplate='%{x:.1f}%', textfont_size=14)
+        st.plotly_chart(fig_all, use_container_width=True, config=HIGH_QUALITY_CONFIG)
     
     with col2:
         st.markdown("**Summary:**")
@@ -289,7 +307,7 @@ with col1:
         hole=0.3
     )
     fig_pie.update_traces(hovertemplate='<b>%{label}</b><br>Count: %{customdata}<extra></extra>', customdata=cluster_stats['Cluster'].map(cluster_stats['Cluster'].value_counts()))
-    st.plotly_chart(fig_pie, use_container_width=True)
+    st.plotly_chart(fig_pie, use_container_width=True, config=HIGH_QUALITY_CONFIG)
 
 with col2:
     # Box Plot: Pass Percentage Distribution by Cluster
@@ -308,9 +326,10 @@ with col2:
         yaxis_title='',
         xaxis_title='Average Pass %',
         height=400,
-        showlegend=False
+        showlegend=False,
+        font=dict(size=14, family='Arial Black')
     )
-    st.plotly_chart(fig_box, use_container_width=True)
+    st.plotly_chart(fig_box, use_container_width=True, config=HIGH_QUALITY_CONFIG)
 
 # Row 2: Scatter Plot and Performance Comparison
 col1, col2 = st.columns(2)
@@ -332,9 +351,10 @@ with col1:
     )
     fig_scatter.update_layout(
         height=400,
-        showlegend=False
+        showlegend=False,
+        font=dict(size=14, family='Arial Black')
     )
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    st.plotly_chart(fig_scatter, use_container_width=True, config=HIGH_QUALITY_CONFIG)
 
 with col2:
     # Violin plot: Year-wise Pass Percentage by Cluster
@@ -357,9 +377,10 @@ with col2:
         xaxis_title='',
         yaxis_title='Pass %',
         height=400,
-        showlegend=False
+        showlegend=False,
+        font=dict(size=14, family='Arial Black')
     )
-    st.plotly_chart(fig_violin, use_container_width=True)
+    st.plotly_chart(fig_violin, use_container_width=True, config=HIGH_QUALITY_CONFIG)
 
 # Cluster Details Table
 st.markdown("### 📋 Detailed Cluster Analysis")
